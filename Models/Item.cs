@@ -14,5 +14,5 @@ public class Item
     [BsonRepresentation(BsonType.Int32)]
     public int priority { get; set; }
 
-    public Link[]? links { get; set; }
+    public List<Link>? links { get; set; }
 }

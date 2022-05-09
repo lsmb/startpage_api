@@ -24,8 +24,8 @@ public class ItemsService
     public async Task<List<Item>> GetAsync() =>
         await _itemsCollection.Find(_ => true).SortByDescending(x => x.priority).ToListAsync();
 
-    public async Task<Item?> GetAsync(string id) =>
-        await _itemsCollection.Find(x => x.id == id).FirstOrDefaultAsync();
+    public async Task<Item?> GetAsync(string name) =>
+        await _itemsCollection.Find(x => x.name == name).FirstOrDefaultAsync();
 
     public async Task CreateAsync(Item newItem) =>
         await _itemsCollection.InsertOneAsync(newItem);
@@ -33,8 +33,8 @@ public class ItemsService
     public async Task UpdateAsync(string id, Item updatedItem) =>
         await _itemsCollection.ReplaceOneAsync(x => x.id == id, updatedItem);
 
-    public async Task RemoveAsync(string id) =>
-        await _itemsCollection.DeleteOneAsync(x => x.id == id);
+    public async Task RemoveAsync(string name) =>
+        await _itemsCollection.DeleteOneAsync(x => x.name == name);
 
     public async Task RemoveCategoryAsync(string category) =>
         await _itemsCollection.DeleteManyAsync(x => x.name == category);
