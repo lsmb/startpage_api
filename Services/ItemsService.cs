@@ -30,8 +30,8 @@ public class ItemsService
     public async Task CreateAsync(Item newItem) =>
         await _itemsCollection.InsertOneAsync(newItem);
 
-    public async Task UpdateAsync(string id, Item updatedItem) =>
-        await _itemsCollection.ReplaceOneAsync(x => x.id == id, updatedItem);
+    public async Task UpdateAsync(string name, Item updatedItem) =>
+        await _itemsCollection.ReplaceOneAsync(x => x.name == name, updatedItem);
 
     public async Task RemoveAsync(string name) =>
         await _itemsCollection.DeleteOneAsync(x => x.name == name);

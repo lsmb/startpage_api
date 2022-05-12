@@ -67,7 +67,7 @@ public class ItemsController : ControllerBase
             return NotFound();
         }
 
-        await _itemsService.UpdateAsync(item.id, item);
+        await _itemsService.UpdateAsync(item.name, item);
 
 
         // await _itemsService.CreateAsync(newLink);
@@ -110,22 +110,61 @@ public class ItemsController : ControllerBase
     //     return NoContent();
     // }
 
-    // [HttpPut("{id:length(24)}")]
-    // public async Task<IActionResult> Update(string id, Item updatedItem)
-    // {
-    //     var item = await _itemsService.GetAsync(id);
+    [HttpPut("{name}")]
+    public async Task<IActionResult> Update(string name, Item updatedItem)
+    {
+        var item = await _itemsService.GetAsync(name);
 
-    //     if (item is null)
-    //     {
-    //         return NotFound();
-    //     }
+        if (item is null)
+        {
+            return NotFound();
+        }
 
-    //     updatedItem.Id = item.Id;
+        item.name = updatedItem.name;
 
-    //     await _itemsService.UpdateAsync(id, updatedItem);
+        Console.WriteLine("Update: ", item);
 
-    //     return NoContent();
-    // }
+        await _itemsService.UpdateAsync(name, item);
+
+        return NoContent();
+    }
+
+    [HttpPut("{name}/{linkName}")]
+    public async Task<IActionResult> Update(string name, string linkName, Item updatedItem)
+    {
+        var item = await _itemsService.GetAsync(name);
+
+        if (item is null)
+        {
+            return NotFound();
+        }
+
+        if (item.links is not null && item.links.Count > 0)
+        {
+            if (item.links.Any(link => link.name == linkName))
+            {
+                int index = item.links.FindIndex(x => x.name == linkName);
+                if (index != -1)
+                {
+                    item.links[index].name = updatedItem.name;
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        else
+        {
+            return NotFound();
+        }
+
+        Console.WriteLine("Update: ", item);
+
+        await _itemsService.UpdateAsync(name, item);
+
+        return NoContent();
+    }
 
     [HttpDelete("{name}")]
     public async Task<IActionResult> Delete(string name)
